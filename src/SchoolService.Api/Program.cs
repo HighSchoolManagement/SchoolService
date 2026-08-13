@@ -1,13 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using SchoolService.Api.Exceptions;
+using SchoolService.Application.Interfaces;
+using SchoolService.Application.Schools.CreateSchool;
+using SchoolService.Application.Schools.GetSchools;
+using SchoolService.Infrastructure.Persistence;
+using SchoolService.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.AddScoped<GetSchoolsHandler>();
+builder.Services.AddScoped<CreateSchoolHandler>();
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+builder.Services.AddDbContext<SchoolDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolDbConnectionString")));
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
+app.UseExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
