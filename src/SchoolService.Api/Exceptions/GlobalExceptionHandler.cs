@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolService.Application.Schools.CreateSchool;
+using SchoolService.Application.Schools.DeleteSchool;
+using SchoolService.Application.Schools.GetSchoolById;
 
 namespace SchoolService.Api.Exceptions
 {
@@ -12,6 +14,8 @@ namespace SchoolService.Api.Exceptions
             {
                 DuplicateSchoolCodeException => StatusCodes.Status409Conflict,
                 ArgumentException => StatusCodes.Status400BadRequest,
+                SchoolNotFoundException => StatusCodes.Status404NotFound,
+                SchoolAlreadyInactiveException => StatusCodes.Status409Conflict,
                 _ => StatusCodes.Status500InternalServerError
             };
             

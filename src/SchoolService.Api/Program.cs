@@ -2,7 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using SchoolService.Api.Exceptions;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.CreateSchool;
+using SchoolService.Application.Schools.DeleteSchool;
+using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Application.Schools.GetSchools;
+using SchoolService.Application.Schools.UpdateSchool;
 using SchoolService.Infrastructure.Persistence;
 using SchoolService.Infrastructure.Repositories;
 
@@ -13,6 +16,9 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<GetSchoolsHandler>();
 builder.Services.AddScoped<CreateSchoolHandler>();
+builder.Services.AddScoped<GetSchoolByIdHandler>();
+builder.Services.AddScoped<UpdateSchoolHandler>();
+builder.Services.AddScoped<DeleteSchoolHandler>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddDbContext<SchoolDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolDbConnectionString")));

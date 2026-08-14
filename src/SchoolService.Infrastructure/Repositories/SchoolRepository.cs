@@ -17,7 +17,7 @@ namespace SchoolService.Infrastructure.Repositories
 
         public async Task<School> AddAsync(School school)
         {
-            await _context.AddAsync(school);
+            _context.Add(school);
             try{
                 await _context.SaveChangesAsync();
             }
@@ -38,14 +38,25 @@ namespace SchoolService.Infrastructure.Repositories
 
         public async Task<List<School>> GetAllAsync()
         {
-            var schools = await _context.Schools.ToListAsync();
+            var schools = await _context.Schools.Where(s => s.IsActive).ToListAsync();
             return schools;
+        }
+
+        public async Task<School?> GetByIdAsync(int id)
+        {
+            var school = await _context.Schools.FirstOrDefaultAsync(s => s.Id == id && s.IsActive);
+            return school;
         }
 
         public async Task<School?> GetBySchoolCodeAsync(string code)
         {
             var school = await _context.Schools.FirstOrDefaultAsync(s => s.SchoolCode == code);
             return school;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }
