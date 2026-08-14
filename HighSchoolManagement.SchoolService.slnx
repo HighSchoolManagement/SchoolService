@@ -5,4 +5,5 @@
     <Project Path="src/SchoolService.Domain/SchoolService.Domain.csproj" />
     <Project Path="src/SchoolService.Infrastructure/SchoolService.Infrastructure.csproj" />
   </Folder>
+  <Project Path="SchoolService.UnitTests/SchoolService.UnitTests.csproj" Id="bfd80e93-5fd2-433b-8cb2-ff3a1796172c" />
 </Solution>
