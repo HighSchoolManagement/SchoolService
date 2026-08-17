@@ -38,7 +38,7 @@ namespace SchoolService.Infrastructure.Repositories
 
         public async Task<List<School>> GetAllAsync()
         {
-            var schools = await _context.Schools.Where(s => s.IsActive).ToListAsync();
+            var schools = await _context.Schools.ToListAsync();
             return schools;
         }
 
