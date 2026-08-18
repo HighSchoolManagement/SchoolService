@@ -23,10 +23,14 @@ namespace SchoolService.Application.Schools.GetSchools
             {
                 var school = new GetSchoolsResponse()
                 {
+                    Id = item.Id,
                     SchoolCode = item.SchoolCode,
                     Name = item.Name,
                     Email = item.Email,
                     PhoneNumber = item.PhoneNumber,
+                    Address = item.Address,
+                    Region = item.Region,
+                    PostalCode = item.PostalCode,
                     City = item.City,
                     Country = item.Country,
                     IsActive = item.IsActive

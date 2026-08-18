@@ -44,7 +44,7 @@ namespace SchoolService.Infrastructure.Repositories
 
         public async Task<School?> GetByIdAsync(int id)
         {
-            var school = await _context.Schools.FirstOrDefaultAsync(s => s.Id == id && s.IsActive);
+            var school = await _context.Schools.FirstOrDefaultAsync(s => s.Id == id);
             return school;
         }
 

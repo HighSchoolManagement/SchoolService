@@ -85,7 +85,7 @@ namespace SchoolService.Application.Schools.UpdateSchool
             {
                 throw new SchoolNotFoundException();
             }
-            if (!string.IsNullOrWhiteSpace(email))
+            if (!string.Equals(existingSchool.Email, email, StringComparison.OrdinalIgnoreCase))
             {
                 var isValidMail = IsValidMail(email);
                 if(!isValidMail)
@@ -94,33 +94,37 @@ namespace SchoolService.Application.Schools.UpdateSchool
                 }
                 existingSchool.Email = email;
             }
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.Equals(existingSchool.Name, name, StringComparison.OrdinalIgnoreCase))
             {
-                existingSchool.Name = name;
+                existingSchool.Name = name ?? "";
             }
-            if (!string.IsNullOrWhiteSpace(phoneNumber))
+            if (!string.Equals(existingSchool.PhoneNumber, phoneNumber, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.PhoneNumber = phoneNumber;
             }
-            if (!string.IsNullOrWhiteSpace(address))
+            if (!string.Equals(existingSchool.Address, address, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.Address = address;
             }
-            if (!string.IsNullOrWhiteSpace(city))
+            if (!string.Equals(existingSchool.City, city, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.City = city;
             }
-            if (!string.IsNullOrWhiteSpace(region))
+            if (!string.Equals(existingSchool.Region, region, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.Region = region;
             }
-            if (!string.IsNullOrWhiteSpace(postalCode))
+            if (!string.Equals(existingSchool.PostalCode, postalCode, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.PostalCode = postalCode;
             }
-            if (!string.IsNullOrWhiteSpace(country))
+            if (!string.Equals(existingSchool.Country, country, StringComparison.OrdinalIgnoreCase))
             {
                 existingSchool.Country = country;
+            }
+            if (!bool.Equals(existingSchool.IsActive, request.IsActive))
+            {
+                existingSchool.IsActive = request.IsActive;
             }
             await _schoolRepository.SaveChangesAsync();           
         }
