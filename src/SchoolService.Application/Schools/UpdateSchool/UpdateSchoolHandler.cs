@@ -4,7 +4,6 @@ using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System.Text;
 
 namespace SchoolService.Application.Schools.UpdateSchool
@@ -22,14 +21,14 @@ namespace SchoolService.Application.Schools.UpdateSchool
             {
                 throw new ArgumentException("Request is null");
             }
-            if (string.IsNullOrWhiteSpace(request.Name) &&
-                 string.IsNullOrWhiteSpace(request.Email) &&
-                 string.IsNullOrWhiteSpace(request.PhoneNumber) &&
-                 string.IsNullOrWhiteSpace(request.Address) &&
-                 string.IsNullOrWhiteSpace(request.City) &&
-                 string.IsNullOrWhiteSpace(request.Region) &&
-                 string.IsNullOrWhiteSpace(request.PostalCode) &&
-                 string.IsNullOrWhiteSpace(request.Country))
+            if (request.Name == null &&
+                request.Email == null &&
+                request.PhoneNumber == null &&
+                request.Address == null &&
+                request.Region == null &&
+                request.City == null &&
+                request.PostalCode == null &&
+                request.Country == null && !request.IsActive.HasValue)
             {
                 throw new ArgumentException("At least one field must be provided.");
             }
@@ -47,103 +46,59 @@ namespace SchoolService.Application.Schools.UpdateSchool
             var region = request.Region?.Trim();
             var country = request.Country?.Trim();
 
-            if (name?.Length > 100)
-            {
-                throw new ArgumentException("Name is invalid length");
-            }
-            if (email?.Length > 150)
-            {
-                throw new ArgumentException("Email is invalid length");
-            }
-            if (phoneNumber?.Length > 30)
-            {
-                throw new ArgumentException("PhoneNumber is invalid length");
-            }
-            if (address?.Length > 250)
-            {
-                throw new ArgumentException("Address is invalid length");
-            }
-            if (city?.Length > 50)
-            {
-                throw new ArgumentException("City is invalid length");
-            }
-            if (postalCode?.Length > 10)
-            {
-                throw new ArgumentException("PostalCode is invalid length");
-            }
-            if (region?.Length > 50)
-            {
-                throw new ArgumentException("Region is invalid length");
-            }
-            if (country?.Length > 50)
-            {
-                throw new ArgumentException("Country is invalid length");
-            }
+            SchoolValidator.ValidateNameLength(name);
+            SchoolValidator.ValidateEmailLength(email);
+            SchoolValidator.ValidatePhoneNumberLength(phoneNumber);
+            SchoolValidator.ValidateAddressLength(address);
+            SchoolValidator.ValidateCityLength(city);
+            SchoolValidator.ValidatePostalCodeLength(postalCode);
+            SchoolValidator.ValidateRegionLength(region);
+            SchoolValidator.ValidateCountryLength(country);
 
             var existingSchool =await _schoolRepository.GetByIdAsync(id);
             if (existingSchool == null)
             {
                 throw new SchoolNotFoundException();
             }
-            if (!string.Equals(existingSchool.Email, email, StringComparison.OrdinalIgnoreCase))
+            if (email != null)
             {
-                var isValidMail = IsValidMail(email);
-                if(!isValidMail)
-                {
-                    throw new ArgumentException("Mail is invalid");
-                }
+                SchoolValidator.ValidateEmailFormat(email);
                 existingSchool.Email = email;
             }
-            if (!string.Equals(existingSchool.Name, name, StringComparison.OrdinalIgnoreCase))
+            if (name != null)
             {
-                existingSchool.Name = name ?? "";
+                SchoolValidator.ValidateNameRequired(name);
+                existingSchool.Name = name;
             }
-            if (!string.Equals(existingSchool.PhoneNumber, phoneNumber, StringComparison.OrdinalIgnoreCase))
+            if (phoneNumber != null)
             {
                 existingSchool.PhoneNumber = phoneNumber;
             }
-            if (!string.Equals(existingSchool.Address, address, StringComparison.OrdinalIgnoreCase))
+            if (address != null)
             {
                 existingSchool.Address = address;
             }
-            if (!string.Equals(existingSchool.City, city, StringComparison.OrdinalIgnoreCase))
+            if (city != null)
             {
                 existingSchool.City = city;
             }
-            if (!string.Equals(existingSchool.Region, region, StringComparison.OrdinalIgnoreCase))
+            if (region != null)
             {
                 existingSchool.Region = region;
             }
-            if (!string.Equals(existingSchool.PostalCode, postalCode, StringComparison.OrdinalIgnoreCase))
+            if (postalCode != null)
             {
                 existingSchool.PostalCode = postalCode;
             }
-            if (!string.Equals(existingSchool.Country, country, StringComparison.OrdinalIgnoreCase))
+            if (country != null)
             {
                 existingSchool.Country = country;
             }
-            if (!bool.Equals(existingSchool.IsActive, request.IsActive))
+            if (request.IsActive.HasValue)
             {
-                existingSchool.IsActive = request.IsActive;
+                existingSchool.IsActive = request.IsActive.Value;
             }
             await _schoolRepository.SaveChangesAsync();           
-        }
-
-        private bool IsValidMail(string? email)
-        {
-            try
-            {
-                if (email == null)
-                {
-                    return false;
-                }
-                var address = new MailAddress(email);
-                return address.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }
