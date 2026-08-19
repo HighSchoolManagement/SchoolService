@@ -1,5 +1,7 @@
 ﻿using SchoolService.Application.Interfaces;
+using SchoolService.Application.Schools.Models;
 using SchoolService.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 
 namespace SchoolService.Application.Schools.CreateSchool
@@ -15,8 +17,11 @@ namespace SchoolService.Application.Schools.CreateSchool
 
         public async Task<CreateSchoolResponse> HandleAsync(CreateSchoolRequest request)
         {
-            SchoolValidator.ValidateSchoolCodeRequired(request.SchoolCode);
-            SchoolValidator.ValidateNameRequired(request.Name);
+            var validationResults = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(request, new ValidationContext(request), validationResults, validateAllProperties: true))
+            {
+                throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
+            }
             var schoolCode = request.SchoolCode.Trim();
             var name = request.Name.Trim();
             var email = request.Email?.Trim();
@@ -27,25 +32,13 @@ namespace SchoolService.Application.Schools.CreateSchool
             var region = request.Region?.Trim();
             var country = request.Country?.Trim();
 
-            SchoolValidator.ValidateEmailFormat(email);
-
-            SchoolValidator.ValidateSchoolCodeLength(schoolCode);
-            SchoolValidator.ValidateNameLength(name);
-            SchoolValidator.ValidateEmailLength(email);
-            SchoolValidator.ValidatePhoneNumberLength(phoneNumber);
-            SchoolValidator.ValidateAddressLength(address);
-            SchoolValidator.ValidateCityLength(city);
-            SchoolValidator.ValidatePostalCodeLength(postalCode);
-            SchoolValidator.ValidateRegionLength(region);
-            SchoolValidator.ValidateCountryLength(country);
-
             var existingSchool = await _schoolRepository.GetBySchoolCodeAsync(schoolCode);
 
             if (existingSchool != null)
             {
                 throw new DuplicateSchoolCodeException();
             }
-            var schoolEntity = new School
+            var createModel = new SchoolCreateModel
             {
                 SchoolCode = schoolCode,
                 Name = name,
@@ -55,10 +48,9 @@ namespace SchoolService.Application.Schools.CreateSchool
                 City = city,
                 Region = region,
                 PostalCode = postalCode,
-                Country = country,
-                IsActive = true
+                Country = country
             };
-            var school = await _schoolRepository.AddAsync(schoolEntity);
+            var school = await _schoolRepository.AddAsync(createModel);
             return school.ToCreateResponse();
         }
 

@@ -1,10 +1,8 @@
 ﻿using SchoolService.Application.Interfaces;
-using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.GetSchoolById;
-using SchoolService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+using System.ComponentModel.DataAnnotations;
+
 
 namespace SchoolService.Application.Schools.UpdateSchool
 {
@@ -21,6 +19,12 @@ namespace SchoolService.Application.Schools.UpdateSchool
             {
                 throw new ArgumentException("Request is null");
             }
+            var validationResults = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(request, new ValidationContext(request), validationResults, validateAllProperties: true))
+            {
+                throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
+            }
+           
             if (request.Name == null &&
                 request.Email == null &&
                 request.PhoneNumber == null &&
@@ -46,15 +50,6 @@ namespace SchoolService.Application.Schools.UpdateSchool
             var region = request.Region?.Trim();
             var country = request.Country?.Trim();
 
-            SchoolValidator.ValidateNameLength(name);
-            SchoolValidator.ValidateEmailLength(email);
-            SchoolValidator.ValidatePhoneNumberLength(phoneNumber);
-            SchoolValidator.ValidateAddressLength(address);
-            SchoolValidator.ValidateCityLength(city);
-            SchoolValidator.ValidatePostalCodeLength(postalCode);
-            SchoolValidator.ValidateRegionLength(region);
-            SchoolValidator.ValidateCountryLength(country);
-
             var existingSchool =await _schoolRepository.GetByIdAsync(id);
             if (existingSchool == null)
             {
@@ -62,7 +57,6 @@ namespace SchoolService.Application.Schools.UpdateSchool
             }
             if (email != null)
             {
-                SchoolValidator.ValidateEmailFormat(email);
                 existingSchool.Email = email;
             }
             if (name != null)

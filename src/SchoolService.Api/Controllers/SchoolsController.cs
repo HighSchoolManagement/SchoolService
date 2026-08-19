@@ -26,10 +26,10 @@ namespace SchoolService.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var schools = await _getSchoolsHandler.HandleAsync();
-            return Ok(schools);
+            var result = await _getSchoolsHandler.HandleAsync(page, pageSize);
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]

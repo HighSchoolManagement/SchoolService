@@ -24,16 +24,8 @@ namespace SchoolService.Application.Schools.GetSchoolById
             {
                 throw new SchoolNotFoundException(); 
             }
-            var response = new GetSchoolByIdResponse
-            {
-                Id = school.Id,
-                SchoolCode = school.SchoolCode,
-                Name = school.Name,
-                Email = school.Email,
-                PhoneNumber = school.PhoneNumber,
-                IsActive = school.IsActive
-            };
-            return response;
+            
+            return school.ToGetByIdResponse();
         }
     }
 }

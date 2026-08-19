@@ -15,29 +15,25 @@ namespace SchoolService.Application.Schools.GetSchools
             _schoolRepository = schoolRepository;
         }
 
-        public async Task<List<GetSchoolsResponse>> HandleAsync()
+        public class PagedResult<T>
         {
-            var schools = await _schoolRepository.GetAllAsync();
-            var responses = new List<GetSchoolsResponse>();
-            foreach (var item in schools)
+            public List<T> Items { get; set; } = new();
+            public int TotalCount { get; set; }
+            public int Page { get; set; }
+            public int PageSize { get; set; }
+            public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
+        }
+
+        public async Task<PagedResult<GetSchoolsResponse>> HandleAsync(int page, int pageSize)
+        {
+            var (schools, totalCount) = await _schoolRepository.GetPagedAsync(page, pageSize);
+            return new PagedResult<GetSchoolsResponse>
             {
-                var school = new GetSchoolsResponse()
-                {
-                    Id = item.Id,
-                    SchoolCode = item.SchoolCode,
-                    Name = item.Name,
-                    Email = item.Email,
-                    PhoneNumber = item.PhoneNumber,
-                    Address = item.Address,
-                    Region = item.Region,
-                    PostalCode = item.PostalCode,
-                    City = item.City,
-                    Country = item.Country,
-                    IsActive = item.IsActive
-                };
-                responses.Add(school);
-            }
-            return responses;
+                Items = schools.ToGetSchoolsResponseList(),   
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
     }
 }
