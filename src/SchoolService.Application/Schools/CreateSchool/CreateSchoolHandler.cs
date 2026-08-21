@@ -1,4 +1,5 @@
-﻿using SchoolService.Application.Interfaces;
+using AutoMapper;
+using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.Models;
 using SchoolService.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
@@ -9,10 +10,12 @@ namespace SchoolService.Application.Schools.CreateSchool
     public class CreateSchoolHandler
     {
         private readonly ISchoolRepository _schoolRepository;
+        private readonly IMapper _mapper;
 
-        public CreateSchoolHandler(ISchoolRepository schoolRepository)
+        public CreateSchoolHandler(ISchoolRepository schoolRepository, IMapper mapper)
         {
             _schoolRepository = schoolRepository;
+            _mapper = mapper;
         }
 
         public async Task<CreateSchoolResponse> HandleAsync(CreateSchoolRequest request)
@@ -51,10 +54,8 @@ namespace SchoolService.Application.Schools.CreateSchool
                 Country = country
             };
             var school = await _schoolRepository.AddAsync(createModel);
-            return school.ToCreateResponse();
+            return _mapper.Map<CreateSchoolResponse>(school);
         }
-
-       
 
     }
 }

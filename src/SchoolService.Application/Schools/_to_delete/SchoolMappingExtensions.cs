@@ -2,11 +2,7 @@
 using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Application.Schools.GetSchools;
 using SchoolService.Application.Schools.Models;
-using SchoolService.Application.Schools.UpdateSchool;
-using SchoolService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace SchoolService.Application.Schools
 {

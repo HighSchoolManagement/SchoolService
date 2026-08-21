@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using SchoolService.Api.Exceptions;
 using SchoolService.Application.Interfaces;
+using SchoolService.Application.Schools;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.DeleteSchool;
 using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Application.Schools.GetSchools;
 using SchoolService.Application.Schools.UpdateSchool;
+using SchoolService.Infrastructure.Mapping;
 using SchoolService.Infrastructure.Persistence;
 using SchoolService.Infrastructure.Repositories;
 
@@ -20,6 +23,11 @@ builder.Services.AddScoped<GetSchoolByIdHandler>();
 builder.Services.AddScoped<UpdateSchoolHandler>();
 builder.Services.AddScoped<DeleteSchoolHandler>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+// Quet 2 assembly (Application + Infrastructure) de tim tat ca cac Profile ke tren,
+// roi dang ky IMapper dung chung cho toan bo ung dung (Scoped, tu dong DI).
+builder.Services.AddAutoMapper(cfg => { },
+    typeof(SchoolProfile).Assembly,
+    typeof(SchoolMappingProfile).Assembly);
 builder.Services.AddDbContext<SchoolDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolDbConnectionString")));
 builder.Services.AddControllers();

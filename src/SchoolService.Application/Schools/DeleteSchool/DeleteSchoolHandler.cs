@@ -17,7 +17,7 @@ namespace SchoolService.Application.Schools.DeleteSchool
             {
                 throw new ArgumentException("Id must be greater than 0");
             }
-            var existingSchool = await _schoolRepository.GetByIdAsync(id);
+            var existingSchool = await _schoolRepository.GetByIdTrackedAsync(id);
             if (existingSchool == null)
             {
                 throw new SchoolNotFoundException();

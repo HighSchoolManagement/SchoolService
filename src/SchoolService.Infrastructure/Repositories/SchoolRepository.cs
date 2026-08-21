@@ -1,4 +1,6 @@
-﻿using Azure;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Azure;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SchoolService.Application.Interfaces;
@@ -12,26 +14,17 @@ namespace SchoolService.Infrastructure.Repositories
     public class SchoolRepository : ISchoolRepository
     {
         private readonly SchoolDbContext _context;
-        public SchoolRepository(SchoolDbContext context)
+        private readonly IMapper _mapper;
+
+        public SchoolRepository(SchoolDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<SchoolReadModel> AddAsync(SchoolCreateModel model)
         {
-            var school = new School
-            {
-                SchoolCode = model.SchoolCode,
-                Name = model.Name,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Address = model.Address,
-                City = model.City,
-                Region = model.Region,
-                PostalCode = model.PostalCode,
-                Country = model.Country,
-                IsActive = true
-            };
+            var school = _mapper.Map<School>(model);
             _context.Add(school);
             try{
                 await _context.SaveChangesAsync();
@@ -48,66 +41,50 @@ namespace SchoolService.Infrastructure.Repositories
                 }
                 throw;
             }
-            return new SchoolReadModel
-            {
-                Id = school.Id,
-                SchoolCode = school.SchoolCode,
-                Name = school.Name,
-                Email = school.Email,
-                PhoneNumber = school.PhoneNumber,
-                Address = school.Address,
-                City = school.City,
-                Region = school.Region,
-                PostalCode = school.PostalCode,
-                Country = school.Country,
-                IsActive = school.IsActive
-            };
+            return _mapper.Map<SchoolReadModel>(school);
         }
 
         public async Task<(List<SchoolReadModel> Items, int TotalCount)> GetPagedAsync(int page, int pageSize)
         {
+
+            if (page <= 0 || pageSize <= 0)
+            {
+                throw new ArgumentException("Page or Page Size must be greater than 0");
+            }
             var query = _context.Schools.AsQueryable();
-            var totalCount = await query.CountAsync();
-            var items = await query
-                .OrderBy(s => s.Id)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(s => new SchoolReadModel
-                {
-                    Id = s.Id,
-                    SchoolCode = s.SchoolCode,
-                    Name = s.Name,
-                    Email = s.Email,
-                    PhoneNumber = s.PhoneNumber,
-                    Address = s.Address,
-                    City = s.City,
-                    Region = s.Region,
-                    PostalCode = s.PostalCode,
-                    Country = s.Country,
-                    IsActive = s.IsActive
-                })
-                .ToListAsync();
-            return (items, totalCount);
+                var totalCount = await query.CountAsync();
+                var items = await query
+                    .OrderBy(s => s.Id)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ProjectTo<SchoolReadModel>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                return (items, totalCount);
+
         }
 
         public async Task<SchoolReadModel?> GetByIdAsync(int id)
         {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Id must be greater than 0");
+            }
             var school = await _context.Schools
             .Where(s => s.Id == id )
-            .Select(s => new SchoolReadModel
+            .ProjectTo<SchoolReadModel>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+
+            return school;
+        }
+
+        public async Task<School?> GetByIdTrackedAsync(int id)
+        {
+            if (id <= 0)
             {
-                Id = s.Id,
-                SchoolCode = s.SchoolCode,
-                Name = s.Name,
-                Email = s.Email,
-                PhoneNumber = s.PhoneNumber,
-                Address = s.Address,
-                City = s.City,
-                Region = s.Region,
-                PostalCode = s.PostalCode,
-                Country = s.Country,
-                IsActive = s.IsActive
-            })
+                throw new ArgumentException("Id must be greater than 0");
+            }
+            var school = await _context.Schools
+            .Where(s => s.Id == id)
             .FirstOrDefaultAsync();
 
             return school;
@@ -115,22 +92,13 @@ namespace SchoolService.Infrastructure.Repositories
 
         public async Task<SchoolReadModel?> GetBySchoolCodeAsync(string code)
         {
+            if(string.IsNullOrWhiteSpace(code))
+            {
+                throw new ArgumentException("Code is required");
+            }
             var school = await _context.Schools
                  .Where(s => s.SchoolCode == code)
-                .Select(s => new SchoolReadModel
-                {
-                    Id = s.Id,
-                    SchoolCode = s.SchoolCode,
-                    Name = s.Name,
-                    Email = s.Email,
-                    PhoneNumber = s.PhoneNumber,
-                    Address = s.Address,
-                    City = s.City,
-                    Region = s.Region,
-                    PostalCode = s.PostalCode,
-                    Country = s.Country,
-                    IsActive = s.IsActive
-                })
+                .ProjectTo<SchoolReadModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
                 return school;
         }

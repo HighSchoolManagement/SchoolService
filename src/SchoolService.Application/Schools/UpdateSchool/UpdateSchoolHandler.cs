@@ -50,7 +50,7 @@ namespace SchoolService.Application.Schools.UpdateSchool
             var region = request.Region?.Trim();
             var country = request.Country?.Trim();
 
-            var existingSchool =await _schoolRepository.GetByIdAsync(id);
+            var existingSchool =await _schoolRepository.GetByIdTrackedAsync(id);
             if (existingSchool == null)
             {
                 throw new SchoolNotFoundException();
