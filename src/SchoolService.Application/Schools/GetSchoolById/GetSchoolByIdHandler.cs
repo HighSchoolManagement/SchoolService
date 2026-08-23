@@ -1,12 +1,11 @@
 using AutoMapper;
+using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace SchoolService.Application.Schools.GetSchoolById
 {
-    public class GetSchoolByIdHandler
+    public class GetSchoolByIdHandler : IRequestHandler<GetSchoolByIdQuery, GetSchoolByIdResponse>
     {
         private readonly ISchoolRepository _schoolRepository;
         private readonly IMapper _mapper;
@@ -17,13 +16,13 @@ namespace SchoolService.Application.Schools.GetSchoolById
             _mapper = mapper;
         }
 
-        public async Task<GetSchoolByIdResponse> HandleAsync(int id)
+        public async Task<GetSchoolByIdResponse> Handle(GetSchoolByIdQuery request, CancellationToken cancellationToken)
         {
-            if (id <= 0)
+            if (request.Id <= 0)
             {
                 throw new ArgumentException("Id must be greater than 0");
             }
-            var school = await _schoolRepository.GetByIdAsync(id);
+            var school = await _schoolRepository.GetByIdAsync(request.Id);
             if (school == null)
             {
                 throw new SchoolNotFoundException();

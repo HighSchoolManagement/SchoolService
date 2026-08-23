@@ -4,6 +4,14 @@ using System.Text;
 
 namespace SchoolService.Application.Schools.GetSchools
 {
+    public class PagedResult<T>
+    {
+        public List<T> Items { get; set; } = new();
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
+    }
     public class GetSchoolsResponse
     {
         public int Id { get; set; }

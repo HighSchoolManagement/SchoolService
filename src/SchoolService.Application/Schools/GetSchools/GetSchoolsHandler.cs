@@ -4,10 +4,11 @@ using SchoolService.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SchoolService.Application.Common.Mediator;
 
 namespace SchoolService.Application.Schools.GetSchools
 {
-    public class GetSchoolsHandler
+    public class GetSchoolsHandler : IRequestHandler<GetSchoolsQuery, PagedResult<GetSchoolsResponse>>
     {
         private readonly ISchoolRepository _schoolRepository;
         private readonly IMapper _mapper;
@@ -18,24 +19,17 @@ namespace SchoolService.Application.Schools.GetSchools
             _mapper = mapper;
         }
 
-        public class PagedResult<T>
-        {
-            public List<T> Items { get; set; } = new();
-            public int TotalCount { get; set; }
-            public int Page { get; set; }
-            public int PageSize { get; set; }
-            public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
-        }
+      
 
-        public async Task<PagedResult<GetSchoolsResponse>> HandleAsync(int page, int pageSize)
+        public async Task<PagedResult<GetSchoolsResponse>> Handle(GetSchoolsQuery request, CancellationToken cancellationToken)
         {
-            var (schools, totalCount) = await _schoolRepository.GetPagedAsync(page, pageSize);
+            var (schools, totalCount) = await _schoolRepository.GetPagedAsync(request.PageNumber, request.PageNumber);
             return new PagedResult<GetSchoolsResponse>
             {
                 Items = _mapper.Map<List<GetSchoolsResponse>>(schools),
                 TotalCount = totalCount,
-                Page = page,
-                PageSize = pageSize
+                Page = request.PageNumber,
+                PageSize = request.PageSize
             };
         }
     }
