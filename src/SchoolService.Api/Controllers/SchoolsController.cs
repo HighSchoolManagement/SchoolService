@@ -33,7 +33,7 @@ namespace SchoolService.Api.Controllers
         {
             try
             {
-                var result = await _getSchoolsHandler.HandleAsync(page, pageSize);
+                var result = await _mediator.Send(new GetSchoolsQuery{PageNumber = page, PageSize = pageSize});
                 return Ok(result);
             }
             catch(ArgumentException ex)
@@ -47,7 +47,7 @@ namespace SchoolService.Api.Controllers
         {
             try
             {
-                var school = await _getSchoolByIdHandler.HandleAsync(id);
+                var school = await _mediator.Send(new GetSchoolByIdQuery{Id = id});
                 return Ok(school);
             }
             catch(ArgumentException ex)
@@ -101,7 +101,7 @@ namespace SchoolService.Api.Controllers
         {
             try
             {
-                await _deleteSchoolHandler.HandleAsync(id);
+                await _mediator.Send(new DeleteSchoolByIdCommand { Id = id });
                 return NoContent();
             }
             catch(ArgumentException ex)

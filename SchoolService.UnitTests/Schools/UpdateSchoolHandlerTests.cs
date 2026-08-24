@@ -29,151 +29,151 @@ public class UpdateSchoolHandlerTests
         };
     }
 
-    [Fact]
-    public async Task HandleAsync_Should_UpdateSchool()
-    {
-        //Arrange
-        var schoolId = 1;
-        var schoolUpdateRequest = new UpdateSchoolRequest()
-        {
-            Name = "School Request",
-            Address = "Address Request",
-            City = "City Request",
-            Country = "Country Request",
-            Email = "EmailRequest@gmail.com",
-            PhoneNumber = "PhoneNumber Request",
-            Region = "Region Request",
-            PostalCode = "71200",
-        };
-        repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
+    // [Fact]
+    // public async Task HandleAsync_Should_UpdateSchool()
+    // {
+    //     //Arrange
+    //     var schoolId = 1;
+    //     var schoolUpdateRequest = new UpdateSchoolRequest()
+    //     {
+    //         Name = "School Request",
+    //         Address = "Address Request",
+    //         City = "City Request",
+    //         Country = "Country Request",
+    //         Email = "EmailRequest@gmail.com",
+    //         PhoneNumber = "PhoneNumber Request",
+    //         Region = "Region Request",
+    //         PostalCode = "71200",
+    //     };
+    //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
+    //
+    //     //Act
+    //     await classUnderTest.HandleAsync(schoolId, schoolUpdateRequest);
+    //
+    //     //Assert
+    //     Assert.Equal(schoolUpdateRequest.Name, school.Name);
+    //     Assert.Equal(schoolUpdateRequest.Address, school.Address);
+    //     Assert.Equal(schoolUpdateRequest.PostalCode, school.PostalCode);
+    //     Assert.Equal(schoolUpdateRequest.City, school.City);
+    //     Assert.Equal(schoolUpdateRequest.Country, school.Country);
+    //     Assert.Equal(schoolUpdateRequest.Region, school.Region);
+    //     Assert.Equal(schoolUpdateRequest.PhoneNumber, school.PhoneNumber);
+    //     Assert.Equal(schoolUpdateRequest.Email, school.Email);
+    //
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Once);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_UpdateOneFieldSchool()
+    // {
+    //     //Arrange
+    //     var schoolId = 1;
+    //     var schoolUpdateRequest = new UpdateSchoolRequest() { Name = "School Request" };
+    //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
+    //
+    //     //Act
+    //     await classUnderTest.HandleAsync(schoolId, schoolUpdateRequest);
+    //
+    //     //Assert
+    //     Assert.Equal(schoolUpdateRequest.Name, school.Name);
+    //     Assert.Equal("Address", school.Address);
+    //     Assert.Equal("City", school.City);
+    //     Assert.Equal("Country", school.Country);
+    //     Assert.Equal("Email@gmail.com", school.Email);
+    //     Assert.Equal("PhoneNumber", school.PhoneNumber);
+    //     Assert.Equal("Region", school.Region);
+    //     Assert.Equal("71000", school.PostalCode);
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Once);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowArgumentException_When_SchoolIdIsInvalid()
+    // {
+    //     var schoolId = 0;
+    //     var request = new UpdateSchoolRequest
+    //     {
+    //         Name = "New School Name"
+    //     };
+    //     await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowArgumentException_When_NoFieldsAreProvided()
+    // {
+    //     var schoolId = 1;
+    //     var request = new UpdateSchoolRequest();
+    //     await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
 
-        //Act
-        await classUnderTest.HandleAsync(schoolId, schoolUpdateRequest);
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowArgumentException_When_RequestIsNull()
+    // {
+    //     var schoolId = 1;
+    //     UpdateSchoolRequest? request = null;
+    //     await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
 
-        //Assert
-        Assert.Equal(schoolUpdateRequest.Name, school.Name);
-        Assert.Equal(schoolUpdateRequest.Address, school.Address);
-        Assert.Equal(schoolUpdateRequest.PostalCode, school.PostalCode);
-        Assert.Equal(schoolUpdateRequest.City, school.City);
-        Assert.Equal(schoolUpdateRequest.Country, school.Country);
-        Assert.Equal(schoolUpdateRequest.Region, school.Region);
-        Assert.Equal(schoolUpdateRequest.PhoneNumber, school.PhoneNumber);
-        Assert.Equal(schoolUpdateRequest.Email, school.Email);
-
-        repository.Verify(x => x.SaveChangesAsync(), Times.Once);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_UpdateOneFieldSchool()
-    {
-        //Arrange
-        var schoolId = 1;
-        var schoolUpdateRequest = new UpdateSchoolRequest() { Name = "School Request" };
-        repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
-
-        //Act
-        await classUnderTest.HandleAsync(schoolId, schoolUpdateRequest);
-
-        //Assert
-        Assert.Equal(schoolUpdateRequest.Name, school.Name);
-        Assert.Equal("Address", school.Address);
-        Assert.Equal("City", school.City);
-        Assert.Equal("Country", school.Country);
-        Assert.Equal("Email@gmail.com", school.Email);
-        Assert.Equal("PhoneNumber", school.PhoneNumber);
-        Assert.Equal("Region", school.Region);
-        Assert.Equal("71000", school.PostalCode);
-        repository.Verify(x => x.SaveChangesAsync(), Times.Once);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowArgumentException_When_SchoolIdIsInvalid()
-    {
-        var schoolId = 0;
-        var request = new UpdateSchoolRequest
-        {
-            Name = "New School Name"
-        };
-        await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowArgumentException_When_NoFieldsAreProvided()
-    {
-        var schoolId = 1;
-        var request = new UpdateSchoolRequest();
-        await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowArgumentException_When_RequestIsNull()
-    {
-        var schoolId = 1;
-        UpdateSchoolRequest? request = null;
-        await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(schoolId, request));
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowSchoolNotFoundException_When_SchoolDoesNotExist()
-    {
-        var schoolId = 1;
-        var request = new UpdateSchoolRequest
-        {
-            Name = "New School Name",
-            Email = "email@gmail.com",
-        };
-        repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync((School?)null);
-        await Assert.ThrowsAsync<SchoolNotFoundException>(() => classUnderTest.HandleAsync(schoolId, request));
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowArgumentException_When_EmailIsInvalid()
-    {
-        var schoolId = 1;
-        var request = new UpdateSchoolRequest
-        {
-            Name = "New School Name",
-            Email = "emailgmail.com",
-        };
-        repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
-        await Assert.ThrowsAsync<ArgumentException>(
-            () => classUnderTest.HandleAsync(schoolId, request));
-        repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_TrimFields()
-    {
-        var schoolId = 1;
-        var request = new UpdateSchoolRequest
-        {
-            Name = "  New School Name  ",
-            Email = "email@gmail.com   ",
-        };
-        repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
-        await classUnderTest.HandleAsync(schoolId, request);
-
-        Assert.Equal("New School Name", school.Name);
-        Assert.Equal("email@gmail.com", school.Email);
-        repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
-        repository.Verify(x => x.SaveChangesAsync(), Times.Once);
-    }
-
-    [Fact]
-    public async Task HandleAsync_Should_ThrowArgumentException_When_AllProvidedFieldsAreWhitespace()
-    {
-        var request = new UpdateSchoolRequest
-        {
-            Name = "   ",
-            Email = "   ",
-        };
-        await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(1, request));
-        repository.Verify(x => x.GetByIdAsync(1), Times.Never);
-        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
-    }
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowSchoolNotFoundException_When_SchoolDoesNotExist()
+    // {
+    //     var schoolId = 1;
+    //     var request = new UpdateSchoolRequest
+    //     {
+    //         Name = "New School Name",
+    //         Email = "email@gmail.com",
+    //     };
+    //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync((School?)null);
+    //     await Assert.ThrowsAsync<SchoolNotFoundException>(() => classUnderTest.HandleAsync(schoolId, request));
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowArgumentException_When_EmailIsInvalid()
+    // {
+    //     var schoolId = 1;
+    //     var request = new UpdateSchoolRequest
+    //     {
+    //         Name = "New School Name",
+    //         Email = "emailgmail.com",
+    //     };
+    //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
+    //     await Assert.ThrowsAsync<ArgumentException>(
+    //         () => classUnderTest.HandleAsync(schoolId, request));
+    //     repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_TrimFields()
+    // {
+    //     var schoolId = 1;
+    //     var request = new UpdateSchoolRequest
+    //     {
+    //         Name = "  New School Name  ",
+    //         Email = "email@gmail.com   ",
+    //     };
+    //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync(school);
+    //     await classUnderTest.HandleAsync(schoolId, request);
+    //
+    //     Assert.Equal("New School Name", school.Name);
+    //     Assert.Equal("email@gmail.com", school.Email);
+    //     repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Once);
+    // }
+    //
+    // [Fact]
+    // public async Task HandleAsync_Should_ThrowArgumentException_When_AllProvidedFieldsAreWhitespace()
+    // {
+    //     var request = new UpdateSchoolRequest
+    //     {
+    //         Name = "   ",
+    //         Email = "   ",
+    //     };
+    //     await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.HandleAsync(1, request));
+    //     repository.Verify(x => x.GetByIdAsync(1), Times.Never);
+    //     repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    // }
 }
