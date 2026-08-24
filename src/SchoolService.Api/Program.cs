@@ -11,18 +11,24 @@ using SchoolService.Application.Schools.UpdateSchool;
 using SchoolService.Infrastructure.Mapping;
 using SchoolService.Infrastructure.Persistence;
 using SchoolService.Infrastructure.Repositories;
+using SchoolService.Application.Common.Mediator;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddScoped<IMediator, Mediator>();
+
 builder.Services.AddScoped<GetSchoolsHandler>();
 builder.Services.AddScoped<CreateSchoolHandler>();
 builder.Services.AddScoped<GetSchoolByIdHandler>();
 builder.Services.AddScoped<UpdateSchoolHandler>();
 builder.Services.AddScoped<DeleteSchoolHandler>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+builder.Services.AddScoped<IRequestHandler<CreateSchoolCommand, CreateSchoolResponse>, CreateSchoolHandler>();
+builder.Services.AddScoped<IRequestHandler<UpdateSchoolCommand, Unit>, UpdateSchoolHandler>();
 // Quet 2 assembly (Application + Infrastructure) de tim tat ca cac Profile ke tren,
 // roi dang ky IMapper dung chung cho toan bo ung dung (Scoped, tu dong DI).
 builder.Services.AddAutoMapper(cfg => { },

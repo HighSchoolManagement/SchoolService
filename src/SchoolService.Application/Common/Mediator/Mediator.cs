@@ -2,6 +2,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SchoolService.Application.Common.Mediator
 {
+
+    public struct Unit
+    {
+        public static readonly Unit Value = new Unit();
+    }
     /// <summary>
     /// Cài đặt IMediator: nhận request, tự tìm ra handler tương ứng qua reflection + DI
     /// container, rồi gọi Handle() trên handler đó. Đây là "trung gian" duy nhất mà

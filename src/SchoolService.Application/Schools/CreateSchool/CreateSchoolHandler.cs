@@ -1,4 +1,5 @@
 using AutoMapper;
+using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.Models;
 using SchoolService.Domain.Entities;
@@ -7,7 +8,7 @@ using System.Net.Mail;
 
 namespace SchoolService.Application.Schools.CreateSchool
 {
-    public class CreateSchoolHandler
+    public class CreateSchoolHandler : IRequestHandler<CreateSchoolCommand, CreateSchoolResponse>
     {
         private readonly ISchoolRepository _schoolRepository;
         private readonly IMapper _mapper;
@@ -18,22 +19,22 @@ namespace SchoolService.Application.Schools.CreateSchool
             _mapper = mapper;
         }
 
-        public async Task<CreateSchoolResponse> HandleAsync(CreateSchoolRequest request)
+        public async Task<CreateSchoolResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
         {
             var validationResults = new List<ValidationResult>();
-            if (!Validator.TryValidateObject(request, new ValidationContext(request), validationResults, validateAllProperties: true))
+            if (!Validator.TryValidateObject(request.createSchoolRequest, new ValidationContext(request.createSchoolRequest), validationResults, validateAllProperties: true))
             {
                 throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
             }
-            var schoolCode = request.SchoolCode.Trim();
-            var name = request.Name.Trim();
-            var email = request.Email?.Trim();
-            var phoneNumber = request.PhoneNumber?.Trim();
-            var address = request.Address?.Trim();
-            var city = request.City?.Trim();
-            var postalCode = request.PostalCode?.Trim();
-            var region = request.Region?.Trim();
-            var country = request.Country?.Trim();
+            var schoolCode = request.createSchoolRequest.SchoolCode.Trim();
+            var name = request.createSchoolRequest.Name.Trim();
+            var email = request.createSchoolRequest?.Email?.Trim();
+            var phoneNumber = request.createSchoolRequest?.PhoneNumber?.Trim();
+            var address = request.createSchoolRequest?.Address?.Trim();
+            var city = request.createSchoolRequest?.City?.Trim();
+            var postalCode = request.createSchoolRequest?.PostalCode?.Trim();
+            var region = request.createSchoolRequest?.Region?.Trim();
+            var country = request.createSchoolRequest?.Country?.Trim();
 
             var existingSchool = await _schoolRepository.GetBySchoolCodeAsync(schoolCode);
 

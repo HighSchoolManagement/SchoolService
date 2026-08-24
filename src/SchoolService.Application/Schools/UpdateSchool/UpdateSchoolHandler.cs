@@ -1,4 +1,5 @@
-﻿using SchoolService.Application.Interfaces;
+﻿using SchoolService.Application.Common.Mediator;
+using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.GetSchoolById;
 
 using System.ComponentModel.DataAnnotations;
@@ -6,51 +7,51 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SchoolService.Application.Schools.UpdateSchool
 {
-    public class UpdateSchoolHandler
+    public class UpdateSchoolHandler : IRequestHandler<UpdateSchoolCommand, Unit>
     {
         private readonly ISchoolRepository _schoolRepository;
         public UpdateSchoolHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
         }
-        public async Task HandleAsync (int id ,UpdateSchoolRequest request)
+        public async Task<Unit> Handle(UpdateSchoolCommand request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
                 throw new ArgumentException("Request is null");
             }
             var validationResults = new List<ValidationResult>();
-            if (!Validator.TryValidateObject(request, new ValidationContext(request), validationResults, validateAllProperties: true))
+            if (!Validator.TryValidateObject(request.updateSchoolRequest, new ValidationContext(request.updateSchoolRequest), validationResults, validateAllProperties: true))
             {
                 throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
             }
            
-            if (request.Name == null &&
-                request.Email == null &&
-                request.PhoneNumber == null &&
-                request.Address == null &&
-                request.Region == null &&
-                request.City == null &&
-                request.PostalCode == null &&
-                request.Country == null && !request.IsActive.HasValue)
+            if (request.updateSchoolRequest.Name == null &&
+                request.updateSchoolRequest.Email == null &&
+                request.updateSchoolRequest.PhoneNumber == null &&
+                request.updateSchoolRequest.Address == null &&
+                request.updateSchoolRequest.Region == null &&
+                request.updateSchoolRequest.City == null &&
+                request.updateSchoolRequest.PostalCode == null &&
+                request.updateSchoolRequest.Country == null && !request.updateSchoolRequest.IsActive.HasValue)
             {
                 throw new ArgumentException("At least one field must be provided.");
             }
-            if (id <= 0)
+            if (request.Id <= 0)
             {
                 throw new ArgumentException("Id must be greater than 0");
             }
 
-            var name = request.Name?.Trim();
-            var email = request.Email?.Trim();
-            var phoneNumber = request.PhoneNumber?.Trim();
-            var address = request.Address?.Trim();
-            var city = request.City?.Trim();
-            var postalCode = request.PostalCode?.Trim();
-            var region = request.Region?.Trim();
-            var country = request.Country?.Trim();
+            var name = request.updateSchoolRequest.Name?.Trim();
+            var email = request.updateSchoolRequest.Email?.Trim();
+            var phoneNumber = request.updateSchoolRequest.PhoneNumber?.Trim();
+            var address = request.updateSchoolRequest.Address?.Trim();
+            var city = request.updateSchoolRequest.City?.Trim();
+            var postalCode = request.updateSchoolRequest.PostalCode?.Trim();
+            var region = request.updateSchoolRequest.Region?.Trim();
+            var country = request.updateSchoolRequest.Country?.Trim();
 
-            var existingSchool =await _schoolRepository.GetByIdTrackedAsync(id);
+            var existingSchool =await _schoolRepository.GetByIdTrackedAsync(request.Id);
             if (existingSchool == null)
             {
                 throw new SchoolNotFoundException();
@@ -88,11 +89,12 @@ namespace SchoolService.Application.Schools.UpdateSchool
             {
                 existingSchool.Country = country;
             }
-            if (request.IsActive.HasValue)
+            if (request.updateSchoolRequest.IsActive.HasValue)
             {
-                existingSchool.IsActive = request.IsActive.Value;
+                existingSchool.IsActive = request.updateSchoolRequest.IsActive.Value;
             }
-            await _schoolRepository.SaveChangesAsync();           
+            await _schoolRepository.SaveChangesAsync();
+            return Unit.Value;
         }
     }
 }

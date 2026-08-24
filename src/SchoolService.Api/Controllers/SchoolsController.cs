@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.DeleteSchool;
 using SchoolService.Application.Schools.GetSchoolById;
@@ -11,18 +12,20 @@ namespace SchoolService.Api.Controllers
     [ApiController]
     public class SchoolsController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly GetSchoolsHandler _getSchoolsHandler;
         private readonly CreateSchoolHandler _createSchoolHandler;
         private readonly GetSchoolByIdHandler _getSchoolByIdHandler;
         private readonly UpdateSchoolHandler _updateSchoolHandler;
         private readonly DeleteSchoolHandler _deleteSchoolHandler;
-        public SchoolsController(GetSchoolsHandler getSchoolsHandler, CreateSchoolHandler createSchoolHandler, GetSchoolByIdHandler getSchoolByIdHandler, UpdateSchoolHandler updateSchoolHandler, DeleteSchoolHandler deleteSchoolHandler)
+        public SchoolsController(GetSchoolsHandler getSchoolsHandler, CreateSchoolHandler createSchoolHandler, GetSchoolByIdHandler getSchoolByIdHandler, UpdateSchoolHandler updateSchoolHandler, DeleteSchoolHandler deleteSchoolHandler, IMediator mediator)
         {
             _getSchoolsHandler = getSchoolsHandler;
             _createSchoolHandler = createSchoolHandler;
             _getSchoolByIdHandler = getSchoolByIdHandler;
             _updateSchoolHandler = updateSchoolHandler;
             _deleteSchoolHandler = deleteSchoolHandler;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -62,7 +65,7 @@ namespace SchoolService.Api.Controllers
         {
             try
             {
-                var school = await _createSchoolHandler.HandleAsync(request);
+                var school = await _mediator.Send(new CreateSchoolCommand { createSchoolRequest = request });
                 return CreatedAtAction(nameof(GetById), new { id = school.Id }, school);
             }
             catch(ArgumentException ex)
@@ -80,7 +83,7 @@ namespace SchoolService.Api.Controllers
         {
             try
             {
-                await _updateSchoolHandler.HandleAsync(id, request);
+                await _mediator.Send(new UpdateSchoolCommand { Id = id, updateSchoolRequest = request });
                 return NoContent();
             }
             catch(SchoolNotFoundException ex)
