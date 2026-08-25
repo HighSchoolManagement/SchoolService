@@ -23,7 +23,7 @@ namespace SchoolService.Application.Schools.GetSchools
 
         public async Task<PagedResult<GetSchoolsResponse>> Handle(GetSchoolsQuery request, CancellationToken cancellationToken)
         {
-            var (schools, totalCount) = await _schoolRepository.GetPagedAsync(request.PageNumber, request.PageNumber);
+            var (schools, totalCount) = await _schoolRepository.GetPagedAsync(request.PageNumber, request.PageSize);
             return new PagedResult<GetSchoolsResponse>
             {
                 Items = _mapper.Map<List<GetSchoolsResponse>>(schools),

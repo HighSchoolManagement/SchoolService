@@ -78,22 +78,22 @@ namespace SchoolService.UnitTests.Schools
             Assert.Equal(school.Email, response.Email);
         }
 
-        // [Fact]
-        // public async Task HandleAsync_Should_ThrowArgumentException_When_IdIsInvalid()
-        // {
-        //     var schoolId = 0;
-        //     await Assert.ThrowsAsync<ArgumentException>(() => handler.Handle(schoolId));
-        //     repository.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
-        // }
-        //
-        // [Fact]
-        // public async Task HandleAsync_Should_ThrowSchoolNotFoundException_When_SchoolNotFound()
-        // {
-        //     var schoolId = 1;
-        //     repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync((School?)null);
-        //
-        //     await Assert.ThrowsAsync<SchoolNotFoundException>(() => handler.Handle(schoolId));
-        //     repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
-        // }
+        [Fact]
+        public async Task Handle_Should_ThrowArgumentException_When_IdIsInvalid()
+        {
+            var schoolId = 0;
+            await Assert.ThrowsAsync<ArgumentException>(() => handler.Handle(new GetSchoolByIdQuery { Id = schoolId}, CancellationToken.None));
+            repository.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task HandleAsync_Should_ThrowSchoolNotFoundException_When_SchoolNotFound()
+        {
+            var schoolId = 1;
+            repository.Setup(x => x.GetByIdAsync(schoolId)).ReturnsAsync((SchoolReadModel?)null);
+
+            await Assert.ThrowsAsync<SchoolNotFoundException>(() => handler.Handle(new GetSchoolByIdQuery { Id = schoolId}, CancellationToken.None));
+            repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
+        }
     }
 }
