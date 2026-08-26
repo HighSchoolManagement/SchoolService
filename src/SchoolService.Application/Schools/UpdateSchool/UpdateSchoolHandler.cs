@@ -16,7 +16,7 @@ namespace SchoolService.Application.Schools.UpdateSchool
         }
         public async Task<Unit> Handle(UpdateSchoolCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
+            if (request == null || request.updateSchoolRequest == null)
             {
                 throw new ArgumentException("Request is null");
             }
