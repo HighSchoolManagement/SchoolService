@@ -48,7 +48,7 @@ namespace SchoolService.Application.Schools.UpdateSchool
             // Copies every non-null property from the request onto the entity by name match.
             // New fields added to UpdateSchoolRequest + School will flow through automatically -
             // no new "if" needed here.
-            var applied = request.updateSchoolRequest.ApplyNonNullProperties(existingSchool);
+            var applied = ObjectPatchExtensions.ApplyNonNullProperties(request.updateSchoolRequest, existingSchool);
 
             if (!applied)
             {

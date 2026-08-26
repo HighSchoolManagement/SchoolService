@@ -16,7 +16,7 @@ namespace SchoolService.Application.Common.Extensions
         /// String values are trimmed before being applied.
         /// </summary>
         /// <returns>true if at least one property was applied.</returns>
-        public static bool ApplyNonNullProperties<TSource, TDestination>(this TSource source, TDestination destination)
+        public static bool ApplyNonNullProperties<TSource, TDestination>(TSource source, TDestination destination)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (destination is null) throw new ArgumentNullException(nameof(destination));
