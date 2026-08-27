@@ -21,14 +21,12 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IMediator, Mediator>();
 
-builder.Services.AddScoped<GetSchoolsHandler>();
-builder.Services.AddScoped<CreateSchoolHandler>();
-builder.Services.AddScoped<GetSchoolByIdHandler>();
-builder.Services.AddScoped<UpdateSchoolHandler>();
-builder.Services.AddScoped<DeleteSchoolHandler>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IRequestHandler<CreateSchoolCommand, CreateSchoolResponse>, CreateSchoolHandler>();
+builder.Services.AddScoped<IRequestHandler<GetSchoolByIdQuery, GetSchoolByIdResponse>, GetSchoolByIdHandler>();
 builder.Services.AddScoped<IRequestHandler<UpdateSchoolCommand, Unit>, UpdateSchoolHandler>();
+builder.Services.AddScoped<IRequestHandler<DeleteSchoolByIdCommand, Unit>, DeleteSchoolHandler>();
+builder.Services.AddScoped<IRequestHandler<GetSchoolsQuery, PagedResult<GetSchoolsResponse>>, GetSchoolsHandler>();
 // Quet 2 assembly (Application + Infrastructure) de tim tat ca cac Profile ke tren,
 // roi dang ky IMapper dung chung cho toan bo ung dung (Scoped, tu dong DI).
 builder.Services.AddAutoMapper(cfg => { },
@@ -67,3 +65,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+public partial class Program { }

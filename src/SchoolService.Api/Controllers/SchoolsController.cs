@@ -13,18 +13,8 @@ namespace SchoolService.Api.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly GetSchoolsHandler _getSchoolsHandler;
-        private readonly CreateSchoolHandler _createSchoolHandler;
-        private readonly GetSchoolByIdHandler _getSchoolByIdHandler;
-        private readonly UpdateSchoolHandler _updateSchoolHandler;
-        private readonly DeleteSchoolHandler _deleteSchoolHandler;
-        public SchoolsController(GetSchoolsHandler getSchoolsHandler, CreateSchoolHandler createSchoolHandler, GetSchoolByIdHandler getSchoolByIdHandler, UpdateSchoolHandler updateSchoolHandler, DeleteSchoolHandler deleteSchoolHandler, IMediator mediator)
+        public SchoolsController(IMediator mediator)
         {
-            _getSchoolsHandler = getSchoolsHandler;
-            _createSchoolHandler = createSchoolHandler;
-            _getSchoolByIdHandler = getSchoolByIdHandler;
-            _updateSchoolHandler = updateSchoolHandler;
-            _deleteSchoolHandler = deleteSchoolHandler;
             _mediator = mediator;
         }
 
@@ -108,13 +98,13 @@ namespace SchoolService.Api.Controllers
             {
                 return BadRequest(new ProblemDetails { Status = StatusCodes.Status400BadRequest, Title = ex.Message });
             }
-            catch(SchoolNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails { Status = StatusCodes.Status404NotFound, Title = ex.Message });
-            }
-            catch(SchoolAlreadyInactiveException ex)
+            catch (SchoolAlreadyInactiveException ex)
             {
                 return Conflict(new ProblemDetails { Status = StatusCodes.Status409Conflict, Title = ex.Message });
+            }
+            catch (SchoolNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Status = StatusCodes.Status404NotFound, Title = ex.Message });
             }
         }
     }
