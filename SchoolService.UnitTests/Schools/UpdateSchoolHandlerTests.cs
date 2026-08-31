@@ -7,6 +7,7 @@ namespace SchoolService.UnitTests.Schools;
 
 using AutoMapper;
 using Moq;
+using SchoolService.Application.Schools.CreateSchool;
 
 public class UpdateSchoolHandlerTests
 {
@@ -192,5 +193,15 @@ public class UpdateSchoolHandlerTests
         await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.Handle(new UpdateSchoolCommand { Id = schoolId, updateSchoolRequest = request }, CancellationToken.None));
         repository.Verify(x => x.GetByIdAsync(1), Times.Never);
         repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    }
+
+    [Theory]
+    [InlineData( "ddddddddddddddssssssssssssddd", "dat@gmail.com")]
+    [InlineData( "91200", "datgmail.com")]
+    public async Task UpdateSchool_ThrowArgumentException_WhenRequestInvalid( string PostalCode, string email)
+    {
+        updateSchoolRequest.PostalCode = PostalCode;
+        updateSchoolRequest.Email = email;
+        await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.Handle(new UpdateSchoolCommand { updateSchoolRequest = updateSchoolRequest }, CancellationToken.None));
     }
 }

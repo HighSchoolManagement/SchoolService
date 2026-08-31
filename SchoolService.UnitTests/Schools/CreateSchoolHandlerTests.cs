@@ -250,5 +250,17 @@ namespace SchoolService.UnitTests.Schools
             repository.Verify(x => x.GetBySchoolCodeAsync(It.IsAny<string>()), Times.Never);
             repository.Verify(x => x.AddAsync(It.IsAny<SchoolCreateModel>()), Times.Never);
         }
+
+        [Theory]
+        [InlineData("", "School", "dat@gmail.com")]
+        [InlineData("C001", "", "dat@gmail.com")]
+        [InlineData("C001", "School", "datgmail.com")]
+        public async Task CreateSchool_ThrowArgumentException_WhenRequestInvalid(string schoolCode, string name, string email)
+        {
+            schoolRequest.SchoolCode = schoolCode;
+            schoolRequest.Name = name;
+            schoolRequest.Email = email;
+            await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.Handle(new CreateSchoolCommand { createSchoolRequest = schoolRequest }, CancellationToken.None));
+        }
     }
 }
