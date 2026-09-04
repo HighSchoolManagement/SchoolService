@@ -21,11 +21,6 @@ namespace SchoolService.Application.Schools.CreateSchool
 
         public async Task<CreateSchoolResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
         {
-            var validationResults = new List<ValidationResult>();
-            if (!Validator.TryValidateObject(request.createSchoolRequest, new ValidationContext(request.createSchoolRequest), validationResults, validateAllProperties: true))
-            {
-                throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
-            }
             var schoolCode = request.createSchoolRequest.SchoolCode.Trim();
             var name = request.createSchoolRequest.Name.Trim();
             var email = request.createSchoolRequest?.Email?.Trim();

@@ -16,6 +16,9 @@ namespace SchoolService.Application.Common.Mediator
         {
             if (request is IValidatableRequest validatable)
             {
+                var target = validatable.GetValidationTarget();
+                if (target is null)
+                    throw new ArgumentException("Validation target must not be null.");
                 var validationResults = new List<ValidationResult>();
                 if (!Validator.TryValidateObject(validatable.GetValidationTarget(), new ValidationContext(validatable.GetValidationTarget()), validationResults, validateAllProperties: true))
                 {

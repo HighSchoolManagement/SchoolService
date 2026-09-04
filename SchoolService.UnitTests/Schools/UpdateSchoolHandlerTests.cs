@@ -7,11 +7,12 @@ namespace SchoolService.UnitTests.Schools;
 
 using AutoMapper;
 using Moq;
+using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Schools.CreateSchool;
 
 public class UpdateSchoolHandlerTests
 {
-    private readonly UpdateSchoolHandler classUnderTest;
+    private readonly IRequestHandler<UpdateSchoolCommand, Unit> classUnderTest;
     private readonly Mock<IMapper> mapper;
     private readonly Mock<ISchoolRepository> repository;
     private readonly School school;
@@ -21,7 +22,8 @@ public class UpdateSchoolHandlerTests
     {
         repository = new Mock<ISchoolRepository>();
         mapper = new Mock<IMapper>();
-        classUnderTest = new UpdateSchoolHandler(repository.Object);
+        classUnderTest = new ValidationHandler<UpdateSchoolCommand, Unit>(
+                new UpdateSchoolHandler(repository.Object));
         school = new School
         {
             Name = "School",
@@ -119,7 +121,7 @@ public class UpdateSchoolHandlerTests
     public async Task HandleAsync_Should_ThrowArgumentException_When_NoFieldsAreProvided()
     {
         var schoolId = 1;
-        var request = new UpdateSchoolRequest();
+        UpdateSchoolRequest? request = null;
         await Assert.ThrowsAsync<ArgumentException>(() => classUnderTest.Handle(new UpdateSchoolCommand { Id = schoolId, updateSchoolRequest = request }, CancellationToken.None));
         repository.Verify(x => x.SaveChangesAsync(), Times.Never);
     }
@@ -177,7 +179,7 @@ public class UpdateSchoolHandlerTests
 
         Assert.Equal("New School Name", school.Name);
         Assert.Equal("email@gmail.com", school.Email);
-        repository.Verify(x => x.GetByIdAsync(schoolId), Times.Once);
+        repository.Verify(x => x.GetByIdTrackedAsync(schoolId), Times.Once);
         repository.Verify(x => x.SaveChangesAsync(), Times.Once);
     }
 

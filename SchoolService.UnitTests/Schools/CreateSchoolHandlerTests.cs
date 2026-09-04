@@ -1,5 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Moq;
+using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.Models;
@@ -13,7 +14,7 @@ namespace SchoolService.UnitTests.Schools
 {
     public class CreateSchoolHandlerTests
     {
-        private readonly CreateSchoolHandler classUnderTest;
+        private readonly IRequestHandler<CreateSchoolCommand, CreateSchoolResponse> classUnderTest;
         private readonly Mock<ISchoolRepository> repository;
         private readonly Mock<IMapper> mapper;
         private readonly SchoolReadModel schoolReadModel;
@@ -24,7 +25,8 @@ namespace SchoolService.UnitTests.Schools
         {
             repository = new Mock<ISchoolRepository>();
             mapper = new Mock<IMapper>();
-             classUnderTest = new CreateSchoolHandler(repository.Object, mapper.Object);
+            classUnderTest = new ValidationHandler<CreateSchoolCommand, CreateSchoolResponse>(
+                new CreateSchoolHandler(repository.Object, mapper.Object));
             schoolRequest = new CreateSchoolRequest
             {
                 SchoolCode = "C001",

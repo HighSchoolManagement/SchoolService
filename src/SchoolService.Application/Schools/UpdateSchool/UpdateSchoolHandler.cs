@@ -22,11 +22,6 @@ namespace SchoolService.Application.Schools.UpdateSchool
             {
                 throw new ArgumentException("Request is null");
             }
-            var validationResults = new List<ValidationResult>();
-            if (!Validator.TryValidateObject(request.updateSchoolRequest, new ValidationContext(request.updateSchoolRequest), validationResults, validateAllProperties: true))
-            {
-                throw new ArgumentException(string.Join("; ", validationResults.Select(r => r.ErrorMessage)));
-            }
 
             if (request.Id <= 0)
             {
