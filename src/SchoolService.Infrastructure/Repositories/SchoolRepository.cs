@@ -54,7 +54,7 @@ namespace SchoolService.Infrastructure.Repositories
             var query = _context.Schools.AsQueryable();
                 var totalCount = await query.CountAsync();
                 var items = await query
-                    .OrderBy(s => s.Id)
+                    .OrderBy(s => s.CreateAt).ThenBy(s => s.Id)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ProjectTo<SchoolReadModel>(_mapper.ConfigurationProvider)

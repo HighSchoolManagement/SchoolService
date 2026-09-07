@@ -14,6 +14,7 @@ namespace SchoolService.Domain.Entities
         public string? Region { get; set; } 
         public string? PostalCode { get; set; } 
         public string? Country { get; set; }
+        public DateTime CreateAt { get; set; }
         public bool IsActive { get; set; } = true;
 
     }
