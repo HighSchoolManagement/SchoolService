@@ -1,39 +1,34 @@
-﻿using SchoolService.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using AutoMapper;
+using SchoolService.Application.Common.Mediator;
+using SchoolService.Application.Interfaces;
+
 
 namespace SchoolService.Application.Schools.GetSchoolById
 {
-    public class GetSchoolByIdHandler
+    public class GetSchoolByIdHandler : IRequestHandler<GetSchoolByIdQuery, GetSchoolByIdResponse>
     {
         private readonly ISchoolRepository _schoolRepository;
-        public GetSchoolByIdHandler(ISchoolRepository schoolRepository)
+        private readonly IMapper _mapper;
+
+        public GetSchoolByIdHandler(ISchoolRepository schoolRepository, IMapper mapper)
         {
             _schoolRepository = schoolRepository;
+            _mapper = mapper;
         }
 
-        public async Task<GetSchoolByIdResponse> HandleAsync(int id)
+        public async Task<GetSchoolByIdResponse> Handle(GetSchoolByIdQuery request, CancellationToken cancellationToken)
         {
-            if (id <= 0)
+            if (request.Id <= 0)
             {
                 throw new ArgumentException("Id must be greater than 0");
             }
-            var school =await _schoolRepository.GetByIdAsync(id);
-            if(school == null)
+            var school = await _schoolRepository.GetByIdAsync(request.Id);
+            if (school == null)
             {
-                throw new SchoolNotFoundException(); 
+                throw new SchoolNotFoundException();
             }
-            var response = new GetSchoolByIdResponse
-            {
-                Id = school.Id,
-                SchoolCode = school.SchoolCode,
-                Name = school.Name,
-                Email = school.Email,
-                PhoneNumber = school.PhoneNumber,
-                IsActive = school.IsActive
-            };
-            return response;
+
+            return _mapper.Map<GetSchoolByIdResponse>(school);
         }
     }
 }
