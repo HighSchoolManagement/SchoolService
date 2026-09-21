@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using SchoolService.Application.Schools.Models;
+using SchoolService.Contracts.Schools;
 
 namespace SchoolService.UnitTests.Schools
 {

@@ -4,6 +4,7 @@ using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.Models;
+using SchoolService.Contracts.Schools;
 using SchoolService.Domain.Entities;
 using System;
 using System.Collections.Generic;

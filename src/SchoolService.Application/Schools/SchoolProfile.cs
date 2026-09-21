@@ -1,3 +1,4 @@
+using SchoolService.Contracts.Schools;
 using AutoMapper;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.GetSchoolById;

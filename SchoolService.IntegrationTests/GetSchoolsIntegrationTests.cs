@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Application.Schools.GetSchools;
+using SchoolService.Contracts.Schools;
 using SchoolService.Domain.Entities;
 using SchoolService.Infrastructure.Persistence;
 using System;

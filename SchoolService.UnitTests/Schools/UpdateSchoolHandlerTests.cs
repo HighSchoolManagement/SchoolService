@@ -9,6 +9,7 @@ using AutoMapper;
 using Moq;
 using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Schools.CreateSchool;
+using SchoolService.Contracts.Schools;
 
 public class UpdateSchoolHandlerTests
 {

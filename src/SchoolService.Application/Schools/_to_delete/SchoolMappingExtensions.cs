@@ -1,4 +1,5 @@
-﻿using SchoolService.Application.Schools.CreateSchool;
+﻿using SchoolService.Contracts.Schools;
+using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.GetSchoolById;
 using SchoolService.Application.Schools.GetSchools;
 using SchoolService.Application.Schools.Models;

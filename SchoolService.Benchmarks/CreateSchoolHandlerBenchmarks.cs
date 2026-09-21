@@ -4,6 +4,7 @@ using Moq;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.Models;
+using SchoolService.Contracts.Schools;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,3 +1,4 @@
+using SchoolService.Contracts.Schools;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using SchoolService.Api.Exceptions;

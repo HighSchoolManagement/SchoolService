@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolService.Application.Schools.UpdateSchool;
+using SchoolService.Contracts.Schools;
 using SchoolService.Domain.Entities;
 using SchoolService.Infrastructure.Persistence;
 using System;

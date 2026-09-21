@@ -1,3 +1,4 @@
+using SchoolService.Contracts.Schools;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SchoolService.Application.Common.Mediator

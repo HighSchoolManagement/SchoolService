@@ -1,4 +1,5 @@
-﻿using SchoolService.Application.Common.Extensions;
+﻿using SchoolService.Contracts.Schools;
+using SchoolService.Application.Common.Extensions;
 using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;
 using SchoolService.Application.Schools.GetSchoolById;

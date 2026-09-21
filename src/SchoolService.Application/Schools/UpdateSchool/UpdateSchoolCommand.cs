@@ -1,4 +1,5 @@
-﻿using SchoolService.Application.Common.Mediator;
+﻿using SchoolService.Contracts.Schools;
+using SchoolService.Application.Common.Mediator;
 using System;
 using System.Collections.Generic;
 using System.Text;

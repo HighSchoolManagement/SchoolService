@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="SchoolService.Contracts/SchoolService.Contracts.csproj" Id="33bec7d2-6fe4-4596-9946-f1f47cc83a0d" />
     <Project Path="src/SchoolService.Api/SchoolService.Api.csproj" />
     <Project Path="src/SchoolService.Application/SchoolService.Application.csproj" />
     <Project Path="src/SchoolService.Domain/SchoolService.Domain.csproj" />

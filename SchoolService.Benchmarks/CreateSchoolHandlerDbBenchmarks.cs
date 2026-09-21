@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging.Abstractions;
 using SchoolService.Application.Schools;
 using SchoolService.Application.Schools.CreateSchool;
+using SchoolService.Contracts.Schools;
 using SchoolService.Infrastructure.Mapping;
 using SchoolService.Infrastructure.Persistence;
 using SchoolService.Infrastructure.Repositories;

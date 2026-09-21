@@ -1,3 +1,4 @@
+using SchoolService.Contracts.Schools;
 using AutoMapper;
 using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Interfaces;

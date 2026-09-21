@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using SchoolService.Contracts.Schools;
+using Microsoft.AspNetCore.Mvc;
 using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Schools.CreateSchool;
 using SchoolService.Application.Schools.DeleteSchool;

@@ -1,3 +1,4 @@
+using SchoolService.Contracts.Schools;
 using AutoMapper;
 using SchoolService.Application.Interfaces;
 using SchoolService.Domain.Entities;

@@ -1,5 +1,6 @@
 using SchoolService.Application.Common.Mediator;
 using SchoolService.Application.Schools.GetSchoolById;
+using SchoolService.Contracts.Schools;
 
 namespace SchoolService.Application.Schools.GetSchools;
 
